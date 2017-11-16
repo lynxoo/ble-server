@@ -1,8 +1,4 @@
-from bluepy.btle import Scanner, DefaultDelegate
-from pony.orm import db_session
-
 from core.settings import DATABASE as db
-from core.models import Device
 from core.ble_scan import AuthScanner, ScanDelegate
 
 class Server:
@@ -19,8 +15,3 @@ class Server:
             print("Device {} ({}), RSSI={} dB".format(dev.addr, dev.addrType, dev.rssi))
             for (adtype, desc, value) in dev.getScanData():
                 print("  {} = {}".format(desc, value))
-
-
-if __name__ == '__main__':
-    serv = Server()
-    serv.run()
