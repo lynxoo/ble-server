@@ -1,3 +1,10 @@
+"""
+    Module contains basic application's settings.
+    
+    module_author: Artur Malarz
+    date: 14.11.2017
+"""
+
 from pony import orm
 
 SQL_DEBUG = False

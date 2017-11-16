@@ -28,6 +28,9 @@ class ScanDelegate(DefaultDelegate):
         Transmission.txPower = txPower.pop() if txPower else None
 
 class AuthScanner(Scanner):
+    """
+        Class provides methods for 
+    """
 
     @db_session
     def process(self, timeout=300.0):
