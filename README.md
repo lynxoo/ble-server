@@ -8,4 +8,4 @@
     * python >= 3.5.2
 3.  ### Python modules:
      * bluepy >= 1.1.4
-     * ponyorm >= 0.7.3
+     * pony >= 0.7.3
