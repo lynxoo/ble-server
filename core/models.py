@@ -27,6 +27,9 @@ class Device(db.Entity):
     id = PrimaryKey(str)
     transmissions = Set('Transmission')
 
+    def __str__(self):
+        return self.id
+
 class Packet(db.Entity):
     """
         Model Packet represents message send by the bluetooth node.
@@ -41,6 +44,7 @@ class Packet(db.Entity):
     seqNo = Optional(int)
     payload = Required(str)
     transmission = Optional('Transmission')
+
 
 class Transmission(db.Entity):
     """
@@ -62,3 +66,7 @@ class Transmission(db.Entity):
     txPower = Optional(int)
     rssi = Required(int)
     direction = Required(int)
+
+    def __str__(self):
+        return "{}  {}  {}  {}  {}  {}".format(self.id, self.time, self.device,
+                                          self.packet.payload, self.rssi, self.txPower)
