@@ -4,7 +4,9 @@
     module_author: Artur Malarz
     date: 14.11.2017
 """
+from pony.orm import db_session
 
+from core.models import Packet
 from core.settings import DATABASE as db
 from core.ble_scan import AuthScanner, ScanDelegate
 
@@ -18,12 +20,9 @@ class Server:
             Server's initialization, initialize server attributes and calls required methods. 
         """
         db.generate_mapping(create_tables=True)
+        self.time = 300
 
+    @db_session
     def run(self):
         scanner = AuthScanner().withDelegate(ScanDelegate())
-        devices = scanner.scan(300.0)
-
-        for dev in devices:
-            print("Device {} ({}), RSSI={} dB".format(dev.addr, dev.addrType, dev.rssi))
-            for (adtype, desc, value) in dev.getScanData():
-                print("  {} = {}".format(desc, value))
+        devices = scanner.scan(timeout=self.time)

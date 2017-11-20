@@ -39,7 +39,7 @@ class Packet(db.Entity):
     """
     type = Required(int)
     seqNo = Optional(int)
-    payload = Required(bytes)
+    payload = Required(str)
     transmission = Optional('Transmission')
 
 class Transmission(db.Entity):
