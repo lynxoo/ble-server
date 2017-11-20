@@ -6,6 +6,7 @@
 2.  ### Unix packages:
     * bluez >= 5.41
     * python >= 3.5.2
+    * libglib2.0
 3.  ### Python modules:
      * bluepy >= 1.1.4
      * pony >= 0.7.3
