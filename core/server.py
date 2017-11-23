@@ -26,14 +26,14 @@ class Server:
         logging.info("Initializing server")
         db.generate_mapping(create_tables=True)
         self.time = settings.TIMEOUT
-        self.attepts = settings.ATTEPTS
+        self.attempts = settings.ATTEMPTS
 
     @db_session
     def run(self):
         logging.info("Preparing scan's delegate class.")
         scanner = AuthScanner().withDelegate(ScanDelegate())
-        logging.info("Initializing scan loop for {} times.".format(self.attepts))
-        for x in range(self.attepts):
+        logging.info("Initializing scan loop for {} times.".format(self.attempts))
+        for x in range(self.attempts):
             try:
                 logging.info("Starting scan #{}".format(x))
                 scanner.scan(timeout=self.time)

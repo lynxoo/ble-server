@@ -13,7 +13,7 @@ ALLOW_ANY = True
 LOGFILE = False
 SQL_DEBUG = False
 FLASK_DEBUG = True
-ATTEPTS = 5
+ATTEMPTS = 5
 TIMEOUT = 30
 
 DATABASE = orm.Database()
