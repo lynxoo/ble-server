@@ -4,7 +4,7 @@ from flask import Flask
 import flask.ext.restful as rest
 
 from core.models import Device, Transmission
-from core.settings import DATABASE as db
+from core.settings import DATABASE as db, FLASK_DEBUG
 
 app = Flask(__name__, template_folder='core/templates')
 api = rest.Api(app)
@@ -60,4 +60,4 @@ api.add_resource(APITransmission, '/api/transmission', endpoint='Transmissions')
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=FLASK_DEBUG)

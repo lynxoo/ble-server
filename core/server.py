@@ -24,8 +24,8 @@ class Server:
         """
         logging.info("Initializing server")
         db.generate_mapping(create_tables=True)
-        self.time = 60
-        self.attepts = 10
+        self.time = 10
+        self.attepts = 2
 
     @db_session
     def run(self):
