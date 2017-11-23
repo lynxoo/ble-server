@@ -64,20 +64,22 @@ class AuthScanner(Scanner):
                 addr = binascii.b2a_hex(resp['addr'][0]).decode('utf-8')
                 addr = ':'.join([addr[i:i + 2] for i in range(0, 12, 2)])
                 addr = addr.upper()
-                if not Device.select(lambda d: d.id == addr).first() or settings.ALLOW_ANY:
+                if not Device.select(lambda d: d.id == addr).first() or not settings.ALLOW_ANY:
                     logging.warning("Unknown device {} send message, skipping...".format(addr))
                     continue
                 dev = ScanEntry(addr, self.iface)
                 logging.info("SCAN message from {}".format(addr))
                 dev._update(resp)
-                name = ''
-                for data in dev.getScanData():
-                    for x in data:
-                        if type("Name") == type(x) and "Name" in x:
-                            name = data[-1]
-                if Device[addr].name != name:
-                    logging.warning("Unknown device {} send message, skipping...".format(addr))
-                    continue
+                if not settings.ALLOW_ANY:
+                    name = ''
+                    for data in dev.getScanData():
+                        for x in data:
+                            if type("Name") == type(x) and "Name" in x:
+                                name = data[-1]
+                    if Device[addr].name != name:
+                        logging.warning("{} invalid name valid: {}, received: {}, skipping...".format(
+                            addr, name, Device[addr].name))
+                        continue
                 if self.delegate is not None:
                     self.delegate.handleDiscovery(dev, (dev.updateCount <= 1), True)
             else:

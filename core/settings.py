@@ -9,10 +9,12 @@ from datetime import datetime
 
 from pony import orm
 
-ALLOW_ANY = False
+ALLOW_ANY = True
 LOGFILE = False
 SQL_DEBUG = False
 FLASK_DEBUG = True
+ATTEPTS = 5
+TIMEOUT = 30
 
 DATABASE = orm.Database()
 DATABASE.bind(provider='sqlite', filename='database.sqlite', create_db=True)

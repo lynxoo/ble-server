@@ -9,6 +9,7 @@ import logging
 from datetime import datetime
 from pony.orm import db_session
 
+from core import settings
 from core.models import Packet
 from core.settings import DATABASE as db
 from core.ble_scan import AuthScanner, ScanDelegate
@@ -24,8 +25,8 @@ class Server:
         """
         logging.info("Initializing server")
         db.generate_mapping(create_tables=True)
-        self.time = 10
-        self.attepts = 2
+        self.time = settings.TIMEOUT
+        self.attepts = settings.ATTEPTS
 
     @db_session
     def run(self):
