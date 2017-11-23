@@ -1,23 +1,64 @@
-from flask import Flask
+from flask import Flask, json, request, render_template
 from pony import orm
+from flask import Flask
+import flask.ext.restful as rest
+from pony.orm import desc
 
-from core.models import Device, Packet, Transmission
+from core.models import Device, Transmission
 from core.settings import DATABASE as db
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='core/templates')
+api = rest.Api(app)
 db.generate_mapping(create_tables=True)
+
+class APIWhitelist(rest.Resource):
+
+    def get(self):
+        with orm.db_session:
+            return {
+                dev.id: {
+                    'name': dev.name
+                } for dev in Device.select()
+            }
+
+    def post(self):
+        with orm.db_session:
+            data = request.get_json(force=True)
+            if data['id'] and data['name']:
+                Device(id=data['id'], name=data['name'])
+                return {}, 200
+        return {}, 400
+
+class APITransmission(rest.Resource):
+
+    def get(self):
+        with orm.db_session:
+            return {
+                tr.id: {
+                    'device_id': tr.device.id,
+                    'time': tr.time,
+                    'raw_data': tr.packet.payload,
+                    'txPower': tr.txPower,
+                    'rssi': tr.rssi
+                } for tr in Transmission.select()
+            }
 
 @app.route('/')
 def index():
-    return 'Ble-WEB-Server'
-
-@app.route('/whitelist')
-def whitelist():
     with orm.db_session:
-        return '<br>'.join([str(dev) for dev in Device.select()])
+        result = list(Device.select())
+        return render_template('index.html' , result=result)
+
 
 @app.route('/transmission')
 def transmission():
     with orm.db_session:
-        return '<br>'.join([str(dat) for dat in Transmission.select()])
+        result = list(Transmission.select())
+        return render_template('transmission.html', result=result)
 
+api.add_resource(APIWhitelist, '/api/whitelist', endpoint='Whitelist')
+api.add_resource(APITransmission, '/api/transmission', endpoint='Transmissions')
+
+
+if __name__ == '__main__':
+    app.run(debug=True)

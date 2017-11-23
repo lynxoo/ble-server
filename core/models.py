@@ -25,6 +25,7 @@ class Device(db.Entity):
             id - (str) bluetooth node's mac address. 
     """
     id = PrimaryKey(str)
+    name = Required(str, unique=True)
     transmissions = Set('Transmission')
 
     def __str__(self):
