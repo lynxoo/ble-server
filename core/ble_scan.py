@@ -69,11 +69,15 @@ class AuthScanner(Scanner):
                     continue
                 dev = ScanEntry(addr, self.iface)
                 logging.info("SCAN message from {}".format(addr))
-                if Device[addr].name != dev.name:
-                    logging.error("{} invalid name, received:{}, valid: {}, skipping...".format(
-                        dev.addr, dev.name, Device[addr].name))
-                    continue
                 dev._update(resp)
+                name = ''
+                for data in dev.getScanData():
+                    for x in data:
+                        if type("Name") == type(x) and "Name" in x:
+                            name = data[-1]
+                if Device[addr].name != name:
+                    logging.warning("Unknown device {} send message, skipping...".format(addr))
+                    continue
                 if self.delegate is not None:
                     self.delegate.handleDiscovery(dev, (dev.updateCount <= 1), True)
             else:

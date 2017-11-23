@@ -100,3 +100,6 @@ ble-env/
 
 # mypy
 .mypy_cache/
+
+#Database
+*.sqlite

@@ -2,7 +2,6 @@ from flask import Flask, json, request, render_template
 from pony import orm
 from flask import Flask
 import flask.ext.restful as rest
-from pony.orm import desc
 
 from core.models import Device, Transmission
 from core.settings import DATABASE as db
