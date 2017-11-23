@@ -12,7 +12,7 @@ from pony import orm
 ALLOW_ANY = False
 LOGFILE = False
 SQL_DEBUG = False
-FLASK_DEBUG = Truegi
+FLASK_DEBUG = True
 
 DATABASE = orm.Database()
 DATABASE.bind(provider='sqlite', filename='database.sqlite', create_db=True)
