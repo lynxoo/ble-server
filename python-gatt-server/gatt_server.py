@@ -6,7 +6,7 @@ import dbus.service
 from datetime import datetime
 
 import array
-
+import math
 import functools
 
 try:
@@ -42,8 +42,8 @@ class Application(dbus.service.Object):
         self.path = '/'
         self.services = []
         dbus.service.Object.__init__(self, bus, self.path)
-        self.add_service(TestService(bus, 2))
-        self.add_service(TimeService(bus, 3))
+        self.add_service(TestService(bus, 0))
+        self.add_service(TimeService(bus, 1))
 
     def get_path(self):
         return dbus.ObjectPath(self.path)
@@ -311,21 +311,53 @@ class CurrentTimeCharacteristic(Characteristic):
         Characteristic.__init__(
                 self, bus, index,
                 self.CURRENT_TIME_UUID,
-                ['read', 'notify'],
+                ['read', 'write', 'notify'],
                 service)
         self.notifying = False
-        self.date = 100
+        self.time = []
+        self.time.append(1)    #LSB year
+        self.time.append(2)    #MSB year
+        self.time.append(3)    #month
+        self.time.append(4)    #day
+        self.time.append(5)    #hours
+        self.time.append(6)    #minutes
+        self.time.append(7)    #seconds
+        self.time.append(7)    #properties
+        self.time.append(9)    #fractinos of seconds
+        self.time.append(7)    #day of week
+        self.timeBytes = bytearray(self.time)
+        GObject.timeout_add(1000, self.update_time)
 
     def notify_current_time(self):
         if not self.notifying:
             return
         self.PropertiesChanged(
                 GATT_CHRC_IFACE,
-                {'Value': [dbus.Byte(self.date)] }, [])
+                {'Value': [list(self.timeBytes)] }, [])
+
+    def update_time(self):
+        self.date = datetime.now()
+        self.time = [self.date.year - 256*math.floor(self.date.year/256),
+                     math.floor(self.date.year/256),
+                     self.date.month,
+                     self.date.day,
+                     self.date.hour,
+                     self.date.minute,
+                     self.date.second,
+                     0,
+                     0,
+                     0]
+        self.timeBytes = bytearray(self.time)
+        self.notify_current_time()
+        return True
 
     def ReadValue(self, options):
-        print('Battery level read: ' + repr(self.date))
-        return [dbus.Byte(self.date)]
+        self.update_time()
+        return self.timeBytes
+
+    def WriteValue(self, date, options):
+        print('Time Write: ' + repr(value))
+        self.timeBytes = date
 
     def StartNotify(self):
         if self.notifying:
