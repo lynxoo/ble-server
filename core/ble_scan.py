@@ -1,6 +1,5 @@
 import binascii
 import time
-
 import logging
 from bluepy.btle import Scanner, BTLEException, ScanEntry, DefaultDelegate
 from pony.orm import db_session, commit
@@ -10,10 +9,19 @@ from core.models import Device, Transmission, Packet
 
 
 class ScanDelegate(DefaultDelegate):
+    """
+        Class inherits after DefaultDelegate from bluepy and provides custom method for saving data received from 
+        BLE nodes.
+    """
+
     def __init__(self):
         DefaultDelegate.__init__(self)
 
     def handleDiscovery(self, dev, isNewDev, isNewData):
+        """
+            Method for saving received data in database, parameters are the same as in default method handleDiscovery 
+            from bluepy however due to method's definition changes they aren't used.
+        """
         logging.info("Preparing data from {}".format(dev.addr))
         data = binascii.b2a_hex(dev.rawData).decode('utf-8').upper()
         packet = Packet(type=0, payload=data)
@@ -35,11 +43,15 @@ class ScanDelegate(DefaultDelegate):
 
 class AuthScanner(Scanner):
     """
-        Class provides methods for 
+        Class inherits from class Scanner and provides custom method for receiving advertisment.
     """
 
     @db_session
     def process(self, timeout=300.0):
+        """
+            Method receives advertisements from nodes. Variable timeout has default value 300 seconds, it define time 
+            after which method will end. 
+        """
         if self._helper is None:
             raise BTLEException(BTLEException.INTERNAL_ERROR,
                                 "Helper not started (did you call start()?)")

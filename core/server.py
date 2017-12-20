@@ -19,7 +19,9 @@ class Server:
 
     def __init__(self, path=None):
         """
-            Server's initialization, initialize server attributes and calls required methods. 
+            Server's initialization, initialize server attributes and calls required methods 
+            for database and logging setup. If path is specified and settings.LOGFILE is True then server creates 
+            logfile under specified path.
         """
         if settings.LOGFILE:
             if not path:
@@ -34,6 +36,9 @@ class Server:
 
     @db_session
     def run(self):
+        """
+            Method starts server to listening advertisements.
+        """
         logging.info("Preparing scan's delegate class.")
         scanner = AuthScanner().withDelegate(ScanDelegate())
         logging.info("Initializing scan loop for {} times.".format(self.attempts))

@@ -6,6 +6,7 @@
 """
 
 from pony.orm import *
+
 from core.settings import DATABASE as db
 
 class Wallpoint(db.Entity):
