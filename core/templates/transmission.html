@@ -1,8 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<body>
-        {% for dev in result %}
-      {{dev.id}}
-      {% endfor %}
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div id="transmission-table" class="col-lg-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>MAC</th>
+                    <th>NAME</th>
+                    <th>TIME</th>
+                    <th>PACKET</th>
+                    <th>txPower</th>
+                    <th>rssi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trans in result %}
+                <tr>
+                    <th>{{loop.index}}</th>
+                    <td>{{trans.device.id}}</td>
+                    <td>{{trans.device.name}}</td>
+                    <td>{{trans.time}}</td>
+                    <td>{{trans.packet.payload}}</td>
+                    <td>{{trans.txPower}}</td>
+                    <td>{{trans.rssi}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

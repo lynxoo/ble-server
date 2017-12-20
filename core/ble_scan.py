@@ -19,6 +19,8 @@ class ScanDelegate(DefaultDelegate):
         packet = Packet(type=0, payload=data)
         txPower = [data[-1] for data in dev.getScanData() if 'Tx Power' in data]
         txPower = int(txPower.pop(), 16) if txPower else None
+        if not Device.select(lambda d: d.id == dev.addr).first():
+            dev.addr = Device['UNKNOWN'].id
         tr = Transmission(
             device=dev.addr,
             time=time.time(),
@@ -64,7 +66,7 @@ class AuthScanner(Scanner):
                 addr = binascii.b2a_hex(resp['addr'][0]).decode('utf-8')
                 addr = ':'.join([addr[i:i + 2] for i in range(0, 12, 2)])
                 addr = addr.upper()
-                if not Device.select(lambda d: d.id == addr).first() or not settings.ALLOW_ANY:
+                if not Device.select(lambda d: d.id == addr).first() and not settings.ALLOW_ANY:
                     logging.warning("Unknown device {} send message, skipping...".format(addr))
                     continue
                 dev = ScanEntry(addr, self.iface)
@@ -76,7 +78,9 @@ class AuthScanner(Scanner):
                         for x in data:
                             if type("Name") == type(x) and "Name" in x:
                                 name = data[-1]
-                    if Device[addr].name != name:
+                    if not settings.NAME_VALIDATION:
+                        logging.warning("Accepting device without name validation...")
+                    elif Device[addr].name != name and Device[addr].name!=None:
                         logging.warning("{} invalid name valid: {}, received: {}, skipping...".format(
                             addr, name, Device[addr].name))
                         continue

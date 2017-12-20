@@ -5,13 +5,11 @@
     date: 14.11.2017
 """
 import logging
-
 from datetime import datetime
+
 from pony.orm import db_session
 
-from core import settings
-from core.models import Packet
-from core.settings import DATABASE as db
+import core.settings as settings
 from core.ble_scan import AuthScanner, ScanDelegate
 
 class Server:
@@ -19,12 +17,18 @@ class Server:
         Class Server provides application's initialization and methods for bluetooth nodes management.
     """
 
-    def __init__(self):
+    def __init__(self, path=None):
         """
             Server's initialization, initialize server attributes and calls required methods. 
         """
+        if settings.LOGFILE:
+            if not path:
+                path = "logs / {}_debug.txt".format(datetime.now().isoformat())
+            logging.basicConfig(filename=path, format='%(asctime)s %(levelname)s >> %(message)s', level=logging.DEBUG)
+        else:
+            logging.basicConfig(format='%(asctime)s %(levelname)s >> %(message)s', level=logging.DEBUG)
         logging.info("Initializing server")
-        db.generate_mapping(create_tables=True)
+        settings.DATABASE.generate_mapping(create_tables=True)
         self.time = settings.TIMEOUT
         self.attempts = settings.ATTEMPTS
 

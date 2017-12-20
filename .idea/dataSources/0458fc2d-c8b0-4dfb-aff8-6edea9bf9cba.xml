@@ -19,7 +19,6 @@
     <column id="10" parent="3" name="name">
       <Position>1</Position>
       <DataType>TEXT|0</DataType>
-      <NotNull>1</NotNull>
     </column>
     <index id="11" parent="3" name="sqlite_autoindex_Device_1">
       <ColNames>id</ColNames>

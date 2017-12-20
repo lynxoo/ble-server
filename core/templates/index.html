@@ -1,6 +1,61 @@
+{% extends "base.html" %}
 {% block content %}
-<table class="table">
-{% for dev in result %}
-{{dev.id}} - {{dev.name}}
-{% endfor %}
+<div class="row">
+    <div class="col-lg-4">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>MAC</th>
+                    <th>NAME</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dev in result %}
+                <tr>
+                    <th>{{loop.index}}</th>
+                    <td>{{dev.id}}</td>
+                    <td>{{dev.name}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div id="add-form" class="col-lg-8">
+        <div id="header">
+            <h2>ADD NEW DEVICE</h2>
+        </div>
+        {% if errors %}
+            <div class="alert alert-danger" role="alert">
+              <strong>{{errors}}</strong>
+            </div>
+        {% endif %}
+        {% if msg %}
+            <div class="alert alert-success" role="alert">
+              <strong>{{msg}}</strong>
+            </div>
+        {% endif %}
+        <form method="post" action="/">
+            <div class="row form-group-lg-8">
+                <div class="col-3">
+                    <label for="mac"><b>DEVICE ADDRESS:</b> </label>
+                </div>
+                <div class="col-5">
+                    <input type="text" name="mac">
+                </div>
+            </div>
+            <div class="row form-group-lg-8">
+                <div class="col-3">
+                    <label for="name">NAME: </label>
+                </div>
+                <div class="col-5">
+                    <input type="text" name="name">
+                </div>
+            </div>
+            <div class="row col align-self-center">
+                <button type="submit" class="btn btn-primary">ADD</button>
+            </div>
+        </form>
+    </div>
+</div>
 {%endblock%}
