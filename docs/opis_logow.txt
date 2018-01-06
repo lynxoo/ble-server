@@ -1,0 +1,7 @@
+1. ERROR "Scan #[scan_number] crashed, critical error occured: [exception]" - skan został zatrzymany z powodu pojawienia się krytycznego błędu na poziomie PVM
+2. INFO "Preparing scan's delegate class." - serwer inicializuje klasę przetwarzającą otrzymane z wiadomości dane
+3. WARNING "Unknown device [device_id] send message, skipping... - serwer otrzymał wiadomość z nieznanego urządzenia i pomija ją
+4. INFO "Preparing data from [device_id]" - serwer zaczyna obrabiać otrzymane z wiadomości dane
+5. INFO "Saving data [transmission_data]" - serwer łączy się z bazą danych i wykonuje zapis obiektu klasy Transmission do bazy danych
+6. WARNING "Accepting device without name validation..." - serwer odbiera wiadomość, będąc w trybie bez walidacji urządzenia wysyłającego transmisje
+7. WARNING "[device_id] invalid name valid: [device_name_from_db], received: [device_recieved_name], skipping..." - serwer otrzymał wiadomość od urządzenia którego nazwa nie jest poprawna względem tej która zapisana jest w bazie danych
