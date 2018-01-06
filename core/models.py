@@ -62,7 +62,7 @@ class Transmission(db.Entity):
            direction - (int) direction of transmission in (0) or out (1) 
     """
     wallpoint = Required('Wallpoint')
-    device = Required(Device)
+    device = Optional(Device, nullable=True)
     time = Required(float)
     packet = Required(Packet)
     txPower = Optional(int)

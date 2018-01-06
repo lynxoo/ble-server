@@ -25,19 +25,21 @@ class ScanDelegate(DefaultDelegate):
         logging.info("Preparing data from {}".format(dev.addr))
         data = binascii.b2a_hex(dev.rawData).decode('utf-8').upper()
         packet = Packet(type=0, payload=data)
+        commit()
         txPower = [data[-1] for data in dev.getScanData() if 'Tx Power' in data]
         txPower = int(txPower.pop(), 16) if txPower else None
-        if not Device.select(lambda d: d.id == dev.addr).first():
-            dev.addr = Device['UNKNOWN'].id
+        print("HERE")
         tr = Transmission(
-            device=dev.addr,
             time=time.time(),
             packet=packet,
-            wallpoint=0,
+            wallpoint=1,
             rssi=dev.rssi,
             direction=0,
             txPower=txPower
         )
+        if Device.select(lambda d: d.id == dev.addr).first():
+            tr.device = dev.addr
+        print("THERE")
         logging.info("Saving data: {}".format(tr))
         commit()
 

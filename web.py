@@ -44,7 +44,7 @@ class APITransmission(rest.Resource):
         with orm.db_session:
             return {
                 tr.id: {
-                    'device_id': tr.device.id,
+                    'device_id': tr.device.id if tr.device else None,
                     'time': tr.time,
                     'raw_data': tr.packet.payload,
                     'txPower': tr.txPower,

@@ -8,7 +8,7 @@
 from pony import orm
 
 ALLOW_ANY = True
-NAME_VALIDATION = True
+NAME_VALIDATION = False
 LOGFILE = True
 SQL_DEBUG = False
 FLASK_DEBUG = True
