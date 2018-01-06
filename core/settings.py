@@ -7,7 +7,8 @@
 
 from pony import orm
 
-ALLOW_ANY = True
+WALLPOINT_NAME = 'WALLPOINT1'
+ALLOW_ANY = False
 NAME_VALIDATION = False
 LOGFILE = True
 SQL_DEBUG = False

@@ -14,8 +14,9 @@ class Wallpoint(db.Entity):
         Model Wallpoint represents sink-server collecting data.
         
         Attributes:
-            id - (int) auto generated primary key.
+            id - (str) primary key, wallpoint name.
     """
+    id = PrimaryKey(str, max_len=50)
     transmissions = Set('Transmission')
 
 class Device(db.Entity):
@@ -24,6 +25,7 @@ class Device(db.Entity):
 
         Attributes:
             id - (str) bluetooth node's mac address. 
+            name - (str) bluetooth node's name. 
     """
     id = PrimaryKey(str, max_len=191)
     name = Optional(str, unique=True, nullable=True, max_len=191)

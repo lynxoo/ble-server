@@ -5,7 +5,7 @@ from bluepy.btle import Scanner, BTLEException, ScanEntry, DefaultDelegate
 from pony.orm import db_session, commit
 
 from core import settings
-from core.models import Device, Transmission, Packet
+from core.models import Device, Transmission, Packet, Wallpoint
 
 
 class ScanDelegate(DefaultDelegate):
@@ -31,7 +31,7 @@ class ScanDelegate(DefaultDelegate):
         tr = Transmission(
             time=time.time(),
             packet=packet,
-            wallpoint=1,
+            wallpoint=Wallpoint[settings.WALLPOINT_NAME],
             rssi=dev.rssi,
             direction=0,
             txPower=txPower

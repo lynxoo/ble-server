@@ -11,6 +11,8 @@ from pony.orm import db_session
 
 import core.settings as settings
 from core.ble_scan import AuthScanner, ScanDelegate
+from core.models import Wallpoint
+
 
 class Server:
     """
@@ -33,6 +35,17 @@ class Server:
         settings.DATABASE.generate_mapping(create_tables=True)
         self.time = settings.TIMEOUT
         self.attempts = settings.ATTEMPTS
+        self.init_wallpoint()
+
+    @db_session
+    def init_wallpoint(self):
+        """
+            Method initialize wallpoint object and save it to the database if wallpoint with name from setting 
+            WALLPOINT_NAME doesn't exist.
+            
+        """
+        if not Wallpoint.select(lambda w: w.id == settings.WALLPOINT_NAME).first():
+            Wallpoint(id=settings.WALLPOINT_NAME)
 
     @db_session
     def run(self):
