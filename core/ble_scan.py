@@ -78,7 +78,7 @@ class AuthScanner(Scanner):
                 addr = binascii.b2a_hex(resp['addr'][0]).decode('utf-8')
                 addr = ':'.join([addr[i:i + 2] for i in range(0, 12, 2)])
                 addr = addr.upper()
-                if not Device.select(lambda d: d.id == addr).first() and not settings.ALLOW_ANY:
+                if not Device.select(lambda d: d.id.upper() == addr).first() and not settings.ALLOW_ANY:
                     logging.warning("Unknown device {} send message, skipping...".format(addr))
                     continue
                 dev = ScanEntry(addr, self.iface)

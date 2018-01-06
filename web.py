@@ -25,9 +25,18 @@ class APIWhitelist(rest.Resource):
         with orm.db_session:
             data = request.get_json(force=True)
             if data['id'] and data['name']:
-                Device(id=data['id'], name=data['name'])
+                Device(id=data['id'].upper(), name=data['name'])
                 return {}, 200
         return {}, 400
+
+    def delete(self, id):
+        with orm.db_session:
+            dev = Device.select(lambda d: d.id.upper() == id).first()
+            if dev:
+                dev.delete()
+                return {}, 200
+            return {}, 404
+
 
 class APITransmission(rest.Resource):
 
@@ -63,7 +72,7 @@ def index():
                 errors = "Device with this parameters already exists!"
                 return render_template('index.html', result=result, errors=errors, msg=msg)
             else:
-                dev = Device(name=name, id=mac)
+                dev = Device(name=name, id=mac.upper())
                 result.append(dev)
                 msg = "Device has been added!"
                 return render_template('index.html', result=result, errors=errors, msg=msg)
@@ -76,7 +85,7 @@ def transmission():
         result = list(Transmission.select())
         return render_template('transmission.html', result=result)
 
-api.add_resource(APIWhitelist, '/api/whitelist', endpoint='Whitelist')
+api.add_resource(APIWhitelist, '/api/whitelist', '/api/whitelist/<id>', endpoint='Whitelist')
 api.add_resource(APITransmission, '/api/transmission', endpoint='Transmissions')
 
 

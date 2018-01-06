@@ -25,7 +25,7 @@ class Server:
         """
         if settings.LOGFILE:
             if not path:
-                path = "logs / {}_debug.txt".format(datetime.now().isoformat())
+                path = "logs/{}_debug.txt".format(datetime.now().isoformat())
             logging.basicConfig(filename=path, format='%(asctime)s %(levelname)s >> %(message)s', level=logging.DEBUG)
         else:
             logging.basicConfig(format='%(asctime)s %(levelname)s >> %(message)s', level=logging.DEBUG)
@@ -48,5 +48,5 @@ class Server:
                 scanner.scan(timeout=self.time)
                 logging.info("Ending scan #{}".format(x))
             except Exception as e:
-                logging.error("Scan #{}, some error occured: {}".format(x,e))
+                logging.error("Scan #{} crashed, critical error occured: {}".format(x,e))
         logging.info("Closing server...")

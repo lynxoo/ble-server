@@ -16,5 +16,6 @@ ATTEMPTS = 5
 TIMEOUT = 30
 
 DATABASE = orm.Database()
-DATABASE.bind(provider='sqlite', filename='database.sqlite', create_db=True)
+#DATABASE.bind(provider='sqlite', filename='database.sqlite', create_db=True)
+DATABASE.bind(provider='mysql', host='localhost', user='ble_user', passwd='', db='ble_data')
 orm.set_sql_debug(SQL_DEBUG)
