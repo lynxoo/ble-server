@@ -28,7 +28,6 @@ class ScanDelegate(DefaultDelegate):
         commit()
         txPower = [data[-1] for data in dev.getScanData() if 'Tx Power' in data]
         txPower = int(txPower.pop(), 16) if txPower else None
-        print("HERE")
         tr = Transmission(
             time=time.time(),
             packet=packet,
@@ -39,7 +38,6 @@ class ScanDelegate(DefaultDelegate):
         )
         if Device.select(lambda d: d.id == dev.addr).first():
             tr.device = dev.addr
-        print("THERE")
         logging.info("Saving data: {}".format(tr))
         commit()
 
